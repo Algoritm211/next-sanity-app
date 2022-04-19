@@ -9,6 +9,7 @@ interface Props {
 
 export const Posts: React.FC<Props> = ({posts}) => {
   const postBlock = posts.map((post) => {
+    //TODO Make separate component
     return (
       <Link key={post._id} href={`/post/${post.slug.current}`}>
         <div className='border rounded-lg group cursor-pointer overflow-hidden'>
