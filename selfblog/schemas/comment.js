@@ -10,7 +10,7 @@ export default {
       title: 'Approved',
       name: 'approved',
       type: 'boolean',
-      description: 'Comments won`t show on public site without approval'
+      description: 'CommentsForm won`t show on public site without approval'
     },
     {
       name: 'email',

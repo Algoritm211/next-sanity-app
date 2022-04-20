@@ -3,46 +3,15 @@ import Header from "../../components/Header/Header";
 import {sanityClient, urlFor} from "../../sanity";
 import {GetStaticPaths, GetStaticProps} from "next";
 import PortableText from 'react-portable-text';
-import {Field, Form } from 'react-final-form';
-import {requiredValidator} from "../../components/forms/validators";
 import { Post } from '../../typings';
-
-interface FormInput {
-  _id: string;
-  name: string;
-  email: string;
-  comment: string;
-}
+import {CommentsForm} from "../../components/forms/CommentsForm/CommentsForm";
+import Comments from "../../components/Comments/Comments";
 
 interface Props {
   post: Post
 }
 
 const PostPage: React.FC<Props> = ({post}) => {
-
-  const onSubmit = (values: FormInput) => {
-    console.log(values)
-    fetch('/api/createComment', {
-      method: 'POST',
-      body: JSON.stringify(values)
-    })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-
-  const commentsBlock = post.comments.map((comment) => {
-    return (
-      <div key={comment._id}>
-        <p>
-          <span className='text-yellow-500'>{comment.name}:</span> {comment.comment}
-        </p>
-      </div>
-    )
-  })
 
   return (
     <main>
@@ -99,79 +68,9 @@ const PostPage: React.FC<Props> = ({post}) => {
 
       <hr className='max-w-lg my-5 mx-auto border-yellow-500' />
 
-      <Form<FormInput>
-        initialValues={{
-          _id: post._id
-        }}
-        onSubmit={onSubmit}
-        render={({handleSubmit, errors, touched}) => {
-          return (
-            <form
-              onSubmit={handleSubmit}
-              className='flex flex-col p-10 max-w-2xl mx-auto mb-10'>
-              <h3 className='text-sm text-yellow-500'>Enjoyed this article?</h3>
-              <h4 className='text-3xl font-bold'>Leave the comment below!</h4>
-              <hr className='py-3 mt-2' />
+      <CommentsForm post={post} />
 
-              <label className='block mb-5'>
-                <span className='text-gray-700'>Name</span>
-                <Field
-                  name='name'
-                  component='input'
-                  className='shadow border rounded py-2 px-3 mt-1 block w-full
-            ring-yellow-500 focus:ring outline-none'
-                  placeholder='Alex Horbunov'
-                  validate={requiredValidator}
-                  type='text' />
-                {touched?.name && <span className='text-red-500'>{errors?.name}</span>}
-              </label>
-              <label className='block mb-5'>
-                <span className='text-gray-700'>Email</span>
-                <Field
-                  name='email'
-                  component='input'
-                  className='shadow border rounded py-2 px-3 mt-1 block w-full
-            ring-yellow-500 focus:ring outline-none'
-                  placeholder='yourEmail@some.com'
-                  validate={requiredValidator}
-                  type='text' />
-                {touched?.email && <span className='text-red-500'>{errors?.email}</span>}
-              </label>
-              <label className='block mb-5'>
-                <span>Comment</span>
-                <Field
-                  name='comment'
-                  component='textarea'
-                  className='shadow border rounded py-2 px-3 mt-1 block w-full
-            ring-yellow-500 focus:ring outline-none'
-                  placeholder='Your Comment...'
-                  validate={requiredValidator}
-                  rows={8} />
-                {touched?.comment && <span className='text-red-500'>{errors?.comment}</span>}
-              </label>
-
-              <button
-                type='submit'
-                className='shadow outline-none text-white
-                bg-yellow-500 hover:bg-yellow-400 focus:bg-yellow-400
-                font-bold rounded py-2 focus:outline-none'
-              >
-                Submit
-              </button>
-            </form>
-          )
-        }}
-      />
-
-      {/* Comments */}
-      <div
-        className='flex flex-col my-10 p-10 max-w-2xl mx-auto
-        shadow-lg space-y-2'
-      >
-        <h3 className='text-4xl'>Comments</h3>
-        <hr className='pb-2' />
-        {commentsBlock}
-      </div>
+      <Comments comments={post.comments}/>
     </main>
   );
 };
