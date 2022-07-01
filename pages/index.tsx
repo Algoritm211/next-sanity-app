@@ -4,6 +4,7 @@ import Header from '../components/Header/Header'
 import { sanityClient } from '../sanity';
 import { Post } from '../typings';
 import {Posts} from "../components/Posts/Posts";
+import {Footer} from "../components/Footer/Footer";
 
 interface Props {
   posts: Array<Post>
@@ -36,6 +37,8 @@ const Home: NextPage<Props> = ({posts}) => {
 
       {/* Posts */}
       <Posts posts={posts} />
+
+      <Footer />
     </div>
   )
 }
